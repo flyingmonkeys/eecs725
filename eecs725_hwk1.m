@@ -1,4 +1,4 @@
-% EECS725 Homework 1 Problem 1/2
+% EECS725 Homework 1
 
 clear;
 close all;
@@ -13,11 +13,12 @@ l_x = 50 / 100; % m
 l_y = 10 / 100; % m
 v_x = 90; % m/s
 h = 1000; % m
-offset = 2000; % m
+offset = -2000; % m
 rcs = 1; % m^2
 
 x = linspace(-2000,2000,100); % m
 
+%% Problem 1
 R = sqrt(h^2 + offset^2 + x.^2); % m
 
 figure(1);
@@ -28,19 +29,22 @@ title('Radial distance vs. x');
 xlabel('x (m)');
 ylabel('R (m)');
 
-phi = atan2(2000,x) - pi/2; % radians
+%% Problem 2
+phi = atan2(2000,-x); % radians
 
 figure(2);
 plot(x,phi*180/pi);
 grid on;
-axis([-2000 2000 -180 180]);
+axis([-2000 2000 0 180]);
 title('Angle vs. x');
 xlabel('x (m)');
 ylabel('phi (degrees)');
 
-theta = (45*pi/180) - atan2(1000,2000); % radians
+%% Problem 3
+theta = (45*pi/180) + atan2(-h,-offset); % radians
 theta = theta * ones(size(x)); % vectorize
 
+phi = phi - pi/2; % rotate phi 90 degrees to align to antenna vector
 lambda = c/f; % m
 beta_xz = lambda / l_x; % radians
 beta_yz = lambda / l_y; % radians
@@ -63,6 +67,7 @@ title('Antenna gain vs. x');
 xlabel('x (m)');
 ylabel('gain (dB)');
 
+%% Problem 4
 PrPt = (G.^2)*(lambda^2)*rcs ./ ( (4*pi)^3 * R.^4 );
 
 figure(4);
@@ -72,6 +77,7 @@ title('Power vs. x');
 xlabel('x (m)');
 ylabel('Power (dB)');
 
+%% Problem 5
 % Compute radial velocity
 v_r = v_x * x./R; % m/s
 
