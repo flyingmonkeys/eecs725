@@ -41,10 +41,11 @@ xlabel('x (m)');
 ylabel('phi (degrees)');
 
 %% Problem 3
-theta = (45*pi/180) + atan2(-h,-offset); % radians
-theta = theta * ones(size(x)); % vectorize
+%theta = (45*pi/180) + atan2(-h,-offset); % radians
+%theta = theta * ones(size(x)); % vectorize
+theta = acos(h./R) - (45*pi/180);
 
-phi = phi - pi/2; % rotate phi 90 degrees to align to antenna vector
+phi = phi - pi/2; % rotate phi -90 degrees to align to antenna vector
 lambda = c/f; % m
 beta_xz = lambda / l_x; % radians
 beta_yz = lambda / l_y; % radians
