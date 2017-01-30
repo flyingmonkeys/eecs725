@@ -71,9 +71,9 @@ PrPt = (G.^2)*(lambda^2)*sigma ./ ( (4*pi)^3 * R.^4 );
 figure(4);
 plot(x,10*log10(PrPt));
 grid on;
-title('Power ratio vs. x');
+title('Power ratio (Pr/Pt) vs. x');
 xlabel('x (m)');
-ylabel('Power ratio (dB)');
+ylabel('Pr/Pt (dB)');
 
 %% Problem 5
 % Compute radial velocity
