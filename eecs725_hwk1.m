@@ -32,7 +32,8 @@ ylabel('R (m)');
 
 %% Problem 2
 % Compute offset angle
-phi = atan2(2000,-x); % offset angle (radians)
+%phi = atan2(2000,-x); % offset angle (radians)
+phi = acos(-x./R);
 
 figure(2);
 plot(x,phi*180/pi);
@@ -81,9 +82,12 @@ v_r = v_x * x./R; % radial velocity (m/s)
 
 % Compute Doppler shift
 f_d = f * -v_r/c; % doppler shift (hz)
+f_d2 = -1*v_x*cos((pi/2)-phi)/lambda;
 
 figure(5)
 plot(x,f_d);
+hold on
+plot(x,f_d2);
 grid on;
 title('Doppler shift vs. x');
 xlabel('x (m)');
