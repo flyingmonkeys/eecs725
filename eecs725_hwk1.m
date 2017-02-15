@@ -5,16 +5,16 @@ close all;
 hold off;
 
 % Universal constants
-c = 3e8;        % speed of light (m/s)
+c = 3e8;           % speed of light (m/s)
 
 % Problem constraints
-f = 1e9;        % carrier frequency (hz)
-l_x = 50 / 100; % antenna array width (m)
-l_y = 10 / 100; % antenna array height (m)
-v_x = 90;       % x speed (m/s)
-h = 1000;       % elevation (m)
-offset = -2000; % target offset (m)
-sigma = 1;      % target rcs (m^2)
+f      = 1e9;      % carrier frequency (hz)
+l_x    = 50 / 100; % antenna array width (m)
+l_y    = 10 / 100; % antenna array height (m)
+v_x    = 90;       % x speed (m/s)
+h      = 1000;     % elevation (m)
+offset = -2000;    % target offset (m)
+sigma  = 1;        % target rcs (m^2)
 
 x = linspace(-2000,2000,100);   % position vectors (m)
 
@@ -25,29 +25,28 @@ R = sqrt(h^2 + offset^2 + x.^2); % radial distance (m)
 figure(1);
 plot(x,R);
 grid on;
-axis([-2000 2000 0 3000]);
+axis([-2000 2000 2000 3000]);
 title('Radial distance vs. x');
 xlabel('x (m)');
 ylabel('R (m)');
 
 %% Problem 2
-% Compute offset angle
-%phi = atan2(2000,-x); % offset angle (radians)
-phi = acos(-x./R);
+% Compute offset angle between aircraft vector and radial vector
+gamma = acos(-x./R); % offset angle (radians)
 
 figure(2);
-plot(x,phi*180/pi);
+plot(x,gamma*180/pi);
 grid on;
-axis([-2000 2000 0 180]);
+axis([-2000 2000 40 140]);
 title('Offset angle vs. x');
 xlabel('x (m)');
-ylabel('phi (degrees)');
+ylabel('gamma (degrees)');
 
 %% Problem 3
 % Compute target elevation (theta) relative to dish orientation
-theta = acos(h./R) - (45*pi/180); % radians
+theta = acos(h./R) - pi/4; % (radians) subtract 45 degrees for dish tilt
+phi   = atan2(-offset,-x) - pi/2; % (radians) rotate phi -90 degrees to align to antenna vector
 
-phi = phi - pi/2;       % rotate phi -90 degrees to align to antenna vector
 lambda = c/f;           % wavelength (m)
 beta_xz = lambda / l_x; % 3dB BW (radians)
 beta_yz = lambda / l_y; % 3dB BW (radians)
@@ -77,12 +76,12 @@ xlabel('x (m)');
 ylabel('Pr/Pt (dB)');
 
 %% Problem 5
-% Compute radial velocity
-v_r = v_x * x./R; % radial velocity (m/s)
-
 % Compute Doppler shift
-f_d = f * -v_r/c; % doppler shift (hz)
-f_d2 = -1*v_x*cos((pi/2)-phi)/lambda;
+f_d = 2 * v_x * cos(gamma)/lambda; % alternative calculation
+
+% Alternative calculation for Doppler shift calc (dR/dt)
+v_r = v_x * x./R; % radial velocity (m/s) = (dR/dx)(dx/dt)
+f_d2 = (2*v_x.*-x)./(lambda*R);
 
 figure(5)
 plot(x,f_d);
