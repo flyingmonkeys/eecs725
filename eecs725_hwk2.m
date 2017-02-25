@@ -24,10 +24,13 @@ R = sqrt( Re^2 + (Re+h)^2 - 2*Re*(Re+h)*cos(alpha) ); % slant range (km)
 
 T = 2*(R*1000) / c; % round-time echo time (s)
 
+delta_T = 2 * w_r / c; % (s)
+PRF_max = 1 / (2*tau + delta_T);
+
 v = sqrt( mu / (Re+h) );   % orbital velocity (km/s)
 v_g = (v * Re) / (Re + h); % ground velocity (km/s)
 
-PRF_min = 2 * (v_g*1000) / l;
+PRF_min = 2 * (v*1000) / l;
 
-max_swath_width = (c/2) * ( (1/PRF_min) - (2*tau) );
+max_swath_width = (c/2) * ( (1/PRF_max) - (2*tau) );
 
