@@ -27,8 +27,8 @@ t0 = h/c; % time that front part of transmitted pulse hits the earth
 t1 = t0 + (c*tau/2); % time that back part of transmitted pulse hits the earth
 
 % Compute radii for leading and trailing edge of wave pulse
-r1 = sqrt(h^2 - (h - c.*t).^2); % (m)
-r2 = sqrt(h^2 - (h - (c.*t) + (c*tau/2)).^2); % (m)
+r2 = sqrt((h + c.*t).^2 - h^2); % (m)
+r1 = sqrt((h + (c.*t) + (c*tau/2)).^2 - h^2); % (m)
 r2(1) = 0; % trailing edge has not contacted ground yet, so first time unit is zero
 
 % Illuminated area (annulus)
