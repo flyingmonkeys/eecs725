@@ -27,15 +27,16 @@ t0 = h/c; % time that front part of transmitted pulse hits the earth
 t1 = t0 + (c*tau/2); % time that back part of transmitted pulse hits the earth
 
 % Compute radii for leading and trailing edge of wave pulse
-r2 = sqrt((h + c.*t).^2 - h^2); % (m)
-r1 = sqrt((h + (c.*t) + (c*tau/2)).^2 - h^2); % (m)
+r2 = sqrt((h + c.*t./2).^2 - h^2); % (m)
+r1 = sqrt((h + (c.*t./2) + (c*tau/2)).^2 - h^2); % (m)
 r2(1) = 0; % trailing edge has not contacted ground yet, so first time unit is zero
+R = sqrt(((r1+r2)/2).^2 + h^2);
 
 % Illuminated area (annulus)
 area = pi*(r1.^2 - r2.^2); % (m)
 
 % Theta (angle of center of annulus with respect to nadir)
-theta = asin(((r1+r2)/2)/h); % (rad)
+theta = asin( ((r1+r2)./2) ./ sqrt(((r1+r2)/2).^2 + h^2) ); % (rad)
     
 % Antenna gain at theta
 G = Go * exp(-2.773 * ((theta/beta).^2 + (theta/beta).^2)); % (linear)
@@ -49,7 +50,7 @@ R = sqrt( h^2 + ((r1+r2)/2).^2 ); % (m)
 % Pr/Pt
 PrPt = (lambda^2 * G.^2 .* area .* sigma_o) ./ ((4*pi)^3 * R.^4); % (linear)
 
-%% Plots—————————————
+%% Plots---------------------
 
 figure(1)
 plot(t*1e6,area);
