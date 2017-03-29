@@ -29,7 +29,7 @@ pos_samp = 10;       % simulation sampling spacing (m)
 % Form planar surface
 X = -6e3:pos_samp:6e3; % (m)
 Y = -6e3:pos_samp:6e3; % (m)
-[mx my] = meshgrid(X,Y);
+[mx my] = meshgrid(X,Y); % (m)
 
 % Compute range to planar surface
 r0 = zeros(length(X),length(Y)); % range to target, time 0
@@ -65,23 +65,29 @@ end
 
 %% Plots-----------
 figure(1)
-contour(mx,my,r0','LevelStep',740,'ShowText','on');
+contour(mx,my,r0'/1000,'LevelStep',0.74);
 title('Isorange');
 xlabel('X (m)');
 ylabel('Y (m)');
 grid on;
+cb0 = colorbar;
+cb0.Label.String = 'Range (km)';
 
 figure(2)
-%contour(X,Y,fb,'LevelStep',1500,'ShowText','on');
-contour(mx,my,fb','LevelStep',10,'ShowText','on');
+%contour(X,Y,fb,'LevelStep',1500);
+contour(mx,my,fb','LevelStep',10);
 title('Isodoppler');
 xlabel('X (m)');
 ylabel('Y (m)');
 grid on;
+cb1 = colorbar;
+cb1.Label.String = 'Doppler Shift (hz)';
 
 figure(3)
-contour(mx,my,P','LevelStep',1,'ShowText','on');
+contour(mx,my,P','LevelStep',1);
 title('Isopower');
 xlabel('X (m)');
 ylabel('Y (m)');
 grid on;
+cb2 = colorbar;
+cb2.Label.String = 'Power variation (dB)';
