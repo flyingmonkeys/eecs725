@@ -1,6 +1,6 @@
 % EECS725 Homework 4
 
-clear;
+clear all;
 close all;
 
 % Universal constants
@@ -27,7 +27,7 @@ k = (f_end-f_start) / tau; % chirp rate (hz/s)
 
 t_burst = linspace(0,tau,(tau/t_samp)-1);
 s       = cos( 2*pi*(f_start.*t_burst + 0.5*k.*(t_burst.^2)) )';
-[Pss,w] = periodogram(s,ones(8192,1),8192);
+[Pss,w] = periodogram(s);
 f_plot  = w / (2*pi*t_samp);
 
 % Generate composite radar return signal
@@ -42,11 +42,11 @@ r = r_t1 + r_t2 + r_t3;
 
 % Multiply transmit and receive signals
 mixer_out = s .* r(1:length(s));
-mixer_psd_out = zeros(length(s),1);
-mixer_psd_out(5000:5000+length(mixer_out)-1) = mixer_out;
+mixer_psd_out = zeros(2*length(s),1);
+mixer_psd_out(5000:5000+length(mixer_out)-1) = mixer_out; % zero-pad
 
 % Spectral analysis
-[Pmm,w] = periodogram(mixer_psd_out); %,ones(8192,1),8192);
+[Pmm,w] = periodogram(mixer_psd_out);
 f_mixer_plot = w / (2*pi*t_samp);
 
 %% Plots-----------

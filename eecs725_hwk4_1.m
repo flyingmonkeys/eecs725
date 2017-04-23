@@ -14,7 +14,7 @@ rx_pos = [0 0 4.35e3];                  % receiver position (m)
 rx_vel = [0 300 0];                     % receiver velocity (m/s)
 
 % UNCOMMENT FOR EXAMPLE TEST CONSTRAINTS
-%
+%{
 lambda = c/200e6;
 tx_pos = [-6e3 -6e3 500];
 rx_pos = [0 0 2e3];
@@ -74,14 +74,14 @@ cb0 = colorbar;
 cb0.Label.String = 'Range (km)';
 
 figure(2)
-%contour(X,Y,fb,'LevelStep',1500);
-contour(mx,my,fb','LevelStep',10);
+contour(mx,my,fb'/1000,'LevelStep',1.5);
+%contour(mx,my,fb','LevelStep',10);
 title('Isodoppler');
 xlabel('X (m)');
 ylabel('Y (m)');
 grid on;
 cb1 = colorbar;
-cb1.Label.String = 'Doppler Shift (hz)';
+cb1.Label.String = 'Doppler Shift (khz)';
 
 figure(3)
 contour(mx,my,P','LevelStep',1);
