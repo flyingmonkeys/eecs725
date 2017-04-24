@@ -40,7 +40,8 @@ s       = cos( 2*pi*(f_start.*t_burst + 0.5*k.*(t_burst.^2)) )';
 f_plot  = w / (2*pi*t_samp);
 
 % Get autocorrelation of chirp
-xc_lfm = xcorr(s,5000);
+%xc_lfm = xcorr2(s,9000);
+xc_lfm = xcorr(s);
 
 % Generate P4 signal (baseband phases)
 theta = zeros(rho,1);
@@ -53,19 +54,28 @@ end
 
 % Generate P4 signal (passband signal)
 s_p4 = zeros(length(t_burst),1);
+pn = sign(rand-0.5);
 for i=1:length(t_burst)
 ss(i) = mod(floor(i/f_samp),rho)+1;
-    s_p4_lp(i) = exp( j * theta(mod(floor(i/f_samp),rho)+1) );
-%s_p4_lp(i) = 1;
-    s_p4(i) = real( s_p4_lp(i) * exp( j*2*pi*fc*(i-1)*t_samp ) );
+if(i > 1)
+    if(ss(i) ~= ss(i-1))
+        pn = sign(rand-0.5);
+    end
+end
+%    s_p4_lp(i) = exp( j * theta(mod(floor(i/f_samp),rho)+1) );
+%s_p4_lp(i) = 1; % DC test signal
+s_p4_lp(i) = exp( j * ((pn+1)/2) );
+%    s_p4(i) = real( s_p4_lp(i) * exp( j*2*pi*fc*(i-1)*t_samp ) );
+%s_p4(i) = cos( 2*pi*fc*(i-1)*t_samp + (pi*((pn+1)/2)) );
+s_p4(i) = cos( 2*pi*fc*(i-1)*t_samp + theta(mod(floor(i/f_samp),rho)+1) );
 end
 
 % Get PSD of P4 signal
-[Pss_P4,w_P4] = periodogram(s_p4,ones(1024,1),1024);
+[Pss_P4,w_P4] = periodogram(s_p4); %,ones(1024,1),1024);
 f_plot_P4 = w_P4 / (2*pi*t_samp);
 
 % Get autocorrelation of P4
-
+xc_p4 = xcorr(s_p4);
 
 % Generate composite radar return signal
 r = zeros(2*length(s),1);
@@ -111,11 +121,16 @@ plot(f_plot_P4,10*log10(Pss_P4));
 title('P4 PSD');
 xlabel('Frequency (hz)');
 ylabel('Power (dB)');
-axis([0e6 400e6 -40 30]);
+%axis([0e6 400e6 -40 30]);
 grid on;
 
 figure(4)
 plot(s_p4_lp);
 
 figure(5)
-plot(xc_lfm(1:1000));
+plot(xc_lfm);
+title('ACS, Chirp');
+
+figure(6)
+plot(xc_p4);
+title('ACS, P4');
